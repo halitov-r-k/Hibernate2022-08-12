@@ -1,0 +1,92 @@
+Учебный проект по статье на Javarush:https://javarush.ru/groups/posts/hibernate-java
+"Ваше первое приложение на Hibernate". Джон Дориан. 2018-03-02.
+Создание проекта maven: Hibernate2022-10-12
+Тестовый запуск
+Создание базы данных dbHibernate20221012
+В названии db дефисы не проходят
+
+mysql> create database dbHibernate20221012;
+Query OK, 1 row affected (1,42 sec)
+mysql>
+
+
+mysql> status
+--------------
+mysql  Ver 8.0.29-alt1 for Linux on x86_64 ((ALT p10))
+
+Connection id:          9
+Current database:
+Current user:           root@localhost
+SSL:                    Not in use
+Current pager:          stdout
+Using outfile:          ''
+Using delimiter:        ;
+Server version:         8.0.29-alt1 (ALT p10)
+Protocol version:       10
+Connection:             Localhost via UNIX socket
+Server characterset:    utf8mb3
+Db     characterset:    utf8mb3
+Client characterset:    utf8mb4
+Conn.  characterset:    utf8mb4
+UNIX socket:            /var/lib/mysql/mysql.sock
+Binary data as:         Hexadecimal
+Uptime:                 3 hours 23 min 38 sec
+
+Threads: 2  Questions: 25  Slow queries: 0  Opens: 2185  Flush tables: 3  Open tables: 13  Queries per second avg: 0.002
+--------------
+
+Установка зависимости в pom.xml
+   <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>8.0.29</version>
+    </dependency>
+
+Создание пользователя
+  mysql> create user 'user1'@'localhost' identified by 'user1';
+  Query OK, 0 rows affected (6,32 sec)
+
+Просмотр пользователя
+mysql> select user from mysql.user;
++------------------+
+| user             |
++------------------+
+| mysql.infoschema |
+| mysql.session    |
+| mysql.sys        |
+| root             |
+| user1            |
++------------------+
+5 rows in set (0,19 sec)
+
+Создание всех привилегий для пользователя
+mysql> GRANT ALL ON dbHibernate202208212.* TO 'user1'@'localhost';
+Query OK, 0 rows affected (0,15 sec)
+
+Просмотр привилегий пользователя
+mysql> show grants for 'user1'@'localhost';
++-------------------------------------------------------------------------+
+| Grants for user1@localhost                                              |
++-------------------------------------------------------------------------+
+| GRANT USAGE ON *.* TO `user1`@`localhost`                               |
+| GRANT ALL PRIVILEGES ON `dbHibernate202208212`.* TO `user1`@`localhost` |
++-------------------------------------------------------------------------+
+установка  привилегий супер пользователя
+mysql> GRANT ALL PRIVILEGES ON * . * TO 'user1'@'localhost' WITH GRANT OPTION;
+
+Добавление зависимости
+<!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
+<dependency>
+    <groupId>org.hibernate</groupId>
+    <artifactId>hibernate-core</artifactId>
+    <version>6.1.2.Final</version>
+    <type>pom</type>
+</dependency>
+
+Создание таблицы users
+ INTEGER id
+ varchar(50) name
+ PRIMARY KEY id
+Поле id начпльное значение
+ Создание модели
